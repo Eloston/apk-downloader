@@ -2,24 +2,28 @@
 /* globals chrome, codes */
 'use strict';
 
-var resetSimSettings = function() {
-    setSimSettings({
+var resetAdvancedSettings = function() {
+    setAdvancedSettings({
         country: "USA",
         operator: "T-Mobile",
-        operatorCode: "31020"
+        operatorCode: "31020",
+        sdkVersion: 2009011,
+        deviceAndSdkVersion: "passion:15"
     });
 };
 
-var checkSimSettings = function() {
-    if (!localStorage.getItem("simCountry") || !localStorage.getItem("simOperator") || !localStorage.getItem("simOperatorCode")) {
-        resetSimSettings();
+var checkAdvancedSettings = function() {
+    if (!localStorage.getItem("simCountry") || !localStorage.getItem("simOperator") || !localStorage.getItem("simOperatorCode") || !localStorage.getItem("sdkVersion") || !localStorage.getItem("deviceAndSdkVersion")) {
+        resetAdvancedSettings();
     }
 };
 
-var setSimSettings = function(sim) {
-    localStorage.setItem('simCountry', sim.country);
-    localStorage.setItem('simOperator',  sim.operator);
-    localStorage.setItem('simOperatorCode', sim.operatorCode);
+var setAdvancedSettings = function(advancedSettings) {
+    localStorage.setItem('simCountry', advancedSettings.country);
+    localStorage.setItem('simOperator',  advancedSettings.operator);
+    localStorage.setItem('simOperatorCode', advancedSettings.operatorCode);
+    localStorage.setItem('sdkVersion', advancedSettings.sdkVersion);
+    localStorage.setItem('deviceAndSdkVersion', advancedSettings.deviceAndSdkVersion);
 };
 
 var initCountryOptions = function() {
@@ -132,6 +136,8 @@ var login = function(email, password, deviceId) {
 var refreshViews = function() {
     txtAuthEmail.textContent = inpEmail.value = localStorage.getItem("authEmail");
     txtDeviceId.textContent = inpDeviceId.value = localStorage.getItem("deviceId");
+    numSdkVersion.value = localStorage.getItem("sdkVersion");
+    txtDeviceAndSdkVersion.value = localStorage.getItem("deviceAndSdkVersion");
     if (typeof localStorage.authToken == "undefined") {
         formLogin.style.display = "block";
         formInfo.style.display = "none";
@@ -139,7 +145,7 @@ var refreshViews = function() {
         formInfo.style.display = "block";
         formLogin.style.display = "none";
 
-        checkSimSettings();
+        checkAdvancedSettings();
         initCountryOptions();
     }
 };
@@ -156,6 +162,8 @@ var inpDeviceId = document.getElementById("user_device_id");
 
 var sltCountry = document.getElementById("slt_country");
 var sltOperator = document.getElementById("slt_operator");
+var numSdkVersion = document.getElementById("numbox_sdkversion");
+var txtDeviceAndSdkVersion = document.getElementById("textbox_device-and-sdkversion");
 var btnDefault = document.getElementById("btn_default");
 
 var btnsAdv = document.getElementsByClassName("btn-advanced-settings");
@@ -184,9 +192,10 @@ chkOverride.checked = localStorage.getItem('assumeAvailable');
 
 btnDefault.onclick = function(e) {
     e.preventDefault();
-    if (confirm('Reset to default sim operator?')) {
-        resetSimSettings();
+    if (confirm('Reset advanced settings to default?')) {
+        resetAdvancedSettings();
         initCountryOptions();
+        refreshViews();
     }
 };
 
@@ -196,10 +205,14 @@ btnSave.onclick = function(e) {
     var country = sltCountry.value;
     var operator = sltOperator.value;
     var operatorCode = codes[country][operator];
-    setSimSettings({
+    var sdkVersion = numSdkVersion.value
+    var deviceAndSdkVersion = txtDeviceAndSdkVersion.value
+    setAdvancedSettings({
         country: country,
         operator: operator,
-        operatorCode: operatorCode
+        operatorCode: operatorCode,
+        sdkVersion: sdkVersion,
+        deviceAndSdkVersion: deviceAndSdkVersion
     });
     alert('Save successfully!');
 };

@@ -23,12 +23,17 @@
     </p>
 
     <div id="advanced-settings">
-        <label for="slt_country">Sim Operator</label><br>
+        <label for="slt_country">SIM Operator</label><br>
         <select id="slt_country"></select>
         <select id="slt_operator"></select><br>
 
-        <input type="button" id="btn_default" class="button-primary" value="Use default" title="Use default SIM operator" tabindex="100">
-        <input type="button" id="btn_save" class="button-primary" value="Save SIM operator" tabindex="100">
+        <label for="numbox_sdkversion">SDK Version</label><br>
+        <input type="number" id="numbox_sdkversion"><br>
+        <label for="textbox_device-and-sdkversion">Device and SDK Version</label><br>
+        <input type="text" id="textbox_device-and-sdkversion"><br>
+
+        <input type="button" id="btn_default" class="button-primary" value="Use defaults" title="Use default advanced settings" tabindex="100">
+        <input type="button" id="btn_save" class="button-primary" value="Save" tabindex="100">
 
         <br>
         <label><input type="checkbox" id="skip-dl-checks"> Always show download button</label>
